@@ -1,6 +1,8 @@
 package com.example.colin.gwent_android_v2;
 
 import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.util.Log;
@@ -37,8 +39,15 @@ public class DashboardFragment extends Fragment implements RecyclerViewAdapter.I
     }
     @Override
     public void onItemClick(View view, int position) {
-        Toast tst = Toast.makeText(MainActivity.getContext(), "A button was clicked!", Toast.LENGTH_LONG);
-        tst.show();
         //Log.i("TAG", "You clicked number " + adapter.getItem(position) + ", which is at cell position " + position);
+        if (adapter.getItem(position) == "View Cards") {
+            FragmentManager fragmentManager = getFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            CardViewerFragment fragment = new CardViewerFragment();
+            fragmentTransaction.replace(R.id.mainRelativeLayout, fragment);
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
+        }
+
     }
 }

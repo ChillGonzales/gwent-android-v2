@@ -1,31 +1,32 @@
 package com.example.colin.gwent_android_v2;
 
+/**
+ * Created by Colin on 7/16/2017.
+ */
+
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageView;
 
-/**
- * Created by Colin on 7/15/2017.
- */
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
-
-    private String[] mData = new String[0];
+public class RecyclerViewImageAdapter extends RecyclerView.Adapter<RecyclerViewImageAdapter.ViewHolder> {
+    private Bitmap[] images;
     private LayoutInflater mInflater;
     private ItemClickListener mClickListener;
 
     // data is passed into the constructor
-    public RecyclerViewAdapter(Context context, String[] data) {
+    public RecyclerViewImageAdapter(Context context, Bitmap[] imageArray) {
         this.mInflater = LayoutInflater.from(context);
-        this.mData = data;
+        images = imageArray;
     }
 
     // inflates the cell layout from xml when needed
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = mInflater.inflate(R.layout.dashboard_button, parent, false);
+        View view = mInflater.inflate(R.layout.card_view, parent, false);
         ViewHolder viewHolder = new ViewHolder(view);
         return viewHolder;
     }
@@ -33,24 +34,24 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     // binds the data to the button in each cell
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        String buttonText = mData[position];
-        holder.myButton.setText(buttonText);
+        Bitmap image = images[position];
+        holder.imageView.setImageBitmap(image);
     }
 
     // total number of cells
     @Override
     public int getItemCount() {
-        return mData.length;
+        return images.length;
     }
 
     // stores and recycles views as they are scrolled off screen
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        public Button myButton;
+        public ImageView imageView;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            myButton = (Button) itemView.findViewById(R.id.button);
-            myButton.setOnClickListener(this);
+            imageView = (ImageView) itemView.findViewById(R.id.imageView);
+            imageView.setOnClickListener(this);
         }
 
         @Override
@@ -59,15 +60,15 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         }
     }
 
-    // convenience method for getting data at click position
-    public String getItem(int id) {
-        return mData[id];
-    }
+        // convenience method for getting data at click position
+        public Bitmap getItem(int id) {
+            return images[id];
+        }
 
-    // allows clicks events to be caught
-    public void setClickListener(ItemClickListener itemClickListener) {
-        this.mClickListener = itemClickListener;
-    }
+        // allows clicks events to be caught
+        public void setClickListener(RecyclerViewImageAdapter.ItemClickListener itemClickListener) {
+            this.mClickListener = itemClickListener;
+        }
 
     // parent activity will implement this method to respond to click events
     public interface ItemClickListener {
