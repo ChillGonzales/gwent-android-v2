@@ -32,19 +32,18 @@ public class DashboardFragment extends Fragment implements RecyclerViewAdapter.I
         // set up the RecyclerView
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         int numberOfColumns = 2;
-        recyclerView.setLayoutManager(new GridLayoutManager(MainActivity.getContext(), numberOfColumns));
-        adapter = new RecyclerViewAdapter(MainActivity.getContext(), data);
+        recyclerView.setLayoutManager(new GridLayoutManager(MainActivity.getInstance(), numberOfColumns));
+        adapter = new RecyclerViewAdapter(MainActivity.getInstance(), data);
         adapter.setClickListener(this);
         recyclerView.setAdapter(adapter);
     }
     @Override
     public void onItemClick(View view, int position) {
-        //Log.i("TAG", "You clicked number " + adapter.getItem(position) + ", which is at cell position " + position);
         if (adapter.getItem(position) == "View Cards") {
             FragmentManager fragmentManager = getFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             CardViewerFragment fragment = new CardViewerFragment();
-            fragmentTransaction.replace(R.id.mainRelativeLayout, fragment);
+            fragmentTransaction.replace(((ViewGroup) getView().getParent()).getId(), fragment);
             fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
         }

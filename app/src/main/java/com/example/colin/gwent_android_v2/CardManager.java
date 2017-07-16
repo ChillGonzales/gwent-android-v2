@@ -1,5 +1,6 @@
 package com.example.colin.gwent_android_v2;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
@@ -22,23 +23,25 @@ import java.util.ArrayList;
 
 public class CardManager {
     static CardManager instance;
-    ArrayList<Bitmap> images;
+    ArrayList<Bitmap> images = new ArrayList<>();
     private String baseUri = "https://api.gwentapi.com/v0/";
     private String cardsEndpoint = "cards";
+    private Context mContext;
 
-    public CardManager() {
+    public CardManager(Context context) {
         instance = this;
+        mContext = context;
         IntentFilter resultFilter = new IntentFilter(Constants.BROADCAST_ACTION);
         final CardResultReceiver receiver = new CardResultReceiver();
         final ArtworkReceiver artworkReceiver = new ArtworkReceiver();
 
-        LocalBroadcastManager.getInstance(MainActivity.getContext()).registerReceiver(receiver, resultFilter);
-        LocalBroadcastManager.getInstance(MainActivity.getContext()).registerReceiver(artworkReceiver, resultFilter);
+        LocalBroadcastManager.getInstance(mContext).registerReceiver(receiver, resultFilter);
+        LocalBroadcastManager.getInstance(mContext).registerReceiver(artworkReceiver, resultFilter);
 
         // Start intent service for getting the page of cards
-        Intent mServiceIntent = new Intent(MainActivity.getInstance(), RetrieveCardsIntentService.class);
+        Intent mServiceIntent = new Intent(mContext, RetrieveCardsIntentService.class);
         mServiceIntent.setData(Uri.parse(baseUri + cardsEndpoint + "?limit=30&offset=40"));
-        MainActivity.getContext().startService(mServiceIntent);
+        mContext.startService(mServiceIntent);
     }
     public void getCardsCallback(String cards) {
         try {
@@ -55,7 +58,7 @@ public class CardManager {
                 StringBuilder text = new StringBuilder();
 
                 try {
-                    InputStream input = MainActivity.getContext().getAssets().open(ci.uuid + ".vrtn");
+                    InputStream input = mContext.getAssets().open(ci.uuid + ".vrtn");
                     BufferedReader br = new BufferedReader(new InputStreamReader(input));
                     String line;
 
@@ -68,7 +71,7 @@ public class CardManager {
                 }
                 catch (Exception e) {
                     //TODO: Add error handling
-                    Toast toast1 = Toast.makeText(MainActivity.getContext(), e.toString(), Toast.LENGTH_LONG);
+                    Toast toast1 = Toast.makeText(mContext, e.toString(), Toast.LENGTH_LONG);
                     toast1.show();
                 }
             }
@@ -82,13 +85,13 @@ public class CardManager {
         try {
             JSONObject arr = new JSONObject(variationData);
             // Get artwork data from variation
-            Intent mArtworkIntent = new Intent(MainActivity.getInstance(), RetrieveArtworkIntentService.class);
+            Intent mArtworkIntent = new Intent(mContext, RetrieveArtworkIntentService.class);
             JSONObject art = new JSONObject(arr.get("Art").toString());
             mArtworkIntent.setData(Uri.parse(art.get("ThumbnailImage").toString()));
-            MainActivity.getContext().startService(mArtworkIntent);
+            mContext.startService(mArtworkIntent);
         } catch (Exception e) {
             //TODO: Add error handling
-            Toast toast = Toast.makeText(MainActivity.getInstance(), e.toString(), Toast.LENGTH_LONG);
+            Toast toast = Toast.makeText(mContext, e.toString(), Toast.LENGTH_LONG);
             toast.show();
         }
     }
@@ -99,6 +102,6 @@ public class CardManager {
         return instance;
     }
     public Bitmap[] getCardsArtwork() {
-        return (Bitmap[])images.toArray();
+        return images.toArray(new Bitmap[images.size()]);
     }
 }

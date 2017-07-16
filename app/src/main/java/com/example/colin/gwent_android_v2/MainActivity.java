@@ -21,12 +21,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        cardManager = new CardManager();
+        cardManager = new CardManager(this.getApplicationContext());
     }
 
-    public static Context getContext() {
-        return instance.getApplicationContext();
-    }
     public static MainActivity getInstance() {
         return instance;
     }

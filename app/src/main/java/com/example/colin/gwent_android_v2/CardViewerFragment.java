@@ -31,14 +31,14 @@ public class CardViewerFragment extends Fragment implements RecyclerViewImageAda
         // set up the RecyclerView
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.cardRecyclerView);
         int numberOfColumns = 3;
-        recyclerView.setLayoutManager(new GridLayoutManager(MainActivity.getContext(), numberOfColumns));
-        RecyclerViewImageAdapter adapter = new RecyclerViewImageAdapter(MainActivity.getContext(), imgs);
+        recyclerView.setLayoutManager(new GridLayoutManager(MainActivity.getInstance(), numberOfColumns));
+        RecyclerViewImageAdapter adapter = new RecyclerViewImageAdapter(MainActivity.getInstance(), imgs);
         adapter.setClickListener(this);
         recyclerView.setAdapter(adapter);
     }
     @Override
     public void onItemClick(View view, int position) {
-        Toast tst = Toast.makeText(MainActivity.getContext(), "You clicked a picture!", Toast.LENGTH_LONG);
+        Toast tst = Toast.makeText(MainActivity.getInstance(), "You clicked a picture!", Toast.LENGTH_LONG);
         tst.show();
         //FragmentManager fragmentManager = getFragmentManager();
         //FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
