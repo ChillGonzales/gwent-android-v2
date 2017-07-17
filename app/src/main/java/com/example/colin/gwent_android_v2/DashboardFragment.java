@@ -40,12 +40,17 @@ public class DashboardFragment extends Fragment implements RecyclerViewAdapter.I
     @Override
     public void onItemClick(View view, int position) {
         if (adapter.getItem(position) == "View Cards") {
-            FragmentManager fragmentManager = getFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            CardViewerFragment fragment = new CardViewerFragment();
-            fragmentTransaction.replace(((ViewGroup) getView().getParent()).getId(), fragment);
-            fragmentTransaction.addToBackStack(null);
-            fragmentTransaction.commit();
+            if (CardManager.getInstance().downloadComplete()) {
+                FragmentManager fragmentManager = getFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                CardViewerFragment fragment = new CardViewerFragment();
+                fragmentTransaction.replace(((ViewGroup) getView().getParent()).getId(), fragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+            } else {
+                Toast tst = Toast.makeText(MainActivity.getInstance(), "Please wait until download is finished.", Toast.LENGTH_SHORT);
+                tst.show();
+            }
         }
 
     }

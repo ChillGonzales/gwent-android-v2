@@ -11,16 +11,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 public class RecyclerViewImageAdapter extends RecyclerView.Adapter<RecyclerViewImageAdapter.ViewHolder> {
     private Bitmap[] images;
+    private String[] names;
     private LayoutInflater mInflater;
     private ItemClickListener mClickListener;
 
     // data is passed into the constructor
-    public RecyclerViewImageAdapter(Context context, Bitmap[] imageArray) {
+    public RecyclerViewImageAdapter(Context context, Bitmap[] imageArray, String[] nameArray) {
         this.mInflater = LayoutInflater.from(context);
         images = imageArray;
+        names = nameArray;
     }
 
     // inflates the cell layout from xml when needed
@@ -36,6 +41,7 @@ public class RecyclerViewImageAdapter extends RecyclerView.Adapter<RecyclerViewI
     public void onBindViewHolder(ViewHolder holder, int position) {
         Bitmap image = images[position];
         holder.imageView.setImageBitmap(image);
+        holder.textView.setText(names[position]);
     }
 
     // total number of cells
@@ -47,11 +53,13 @@ public class RecyclerViewImageAdapter extends RecyclerView.Adapter<RecyclerViewI
     // stores and recycles views as they are scrolled off screen
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public ImageView imageView;
+        public TextView textView;
 
         public ViewHolder(View itemView) {
             super(itemView);
             imageView = (ImageView) itemView.findViewById(R.id.imageView);
             imageView.setOnClickListener(this);
+            textView = (TextView) itemView.findViewById(R.id.nameText);
         }
 
         @Override

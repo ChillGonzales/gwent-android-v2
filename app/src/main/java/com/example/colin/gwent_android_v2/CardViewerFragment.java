@@ -27,18 +27,19 @@ public class CardViewerFragment extends Fragment implements RecyclerViewImageAda
     public void onViewCreated(View view, Bundle savedInstanceState) {
         //TODO: Get images for cards here from CardManager
         Bitmap[] imgs = CardManager.getInstance().getCardsArtwork();
+        String[] names = CardManager.getInstance().getCardNames();
 
         // set up the RecyclerView
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.cardRecyclerView);
         int numberOfColumns = 3;
         recyclerView.setLayoutManager(new GridLayoutManager(MainActivity.getInstance(), numberOfColumns));
-        RecyclerViewImageAdapter adapter = new RecyclerViewImageAdapter(MainActivity.getInstance(), imgs);
+        RecyclerViewImageAdapter adapter = new RecyclerViewImageAdapter(MainActivity.getInstance(), imgs, names);
         adapter.setClickListener(this);
         recyclerView.setAdapter(adapter);
     }
     @Override
     public void onItemClick(View view, int position) {
-        Toast tst = Toast.makeText(MainActivity.getInstance(), "You clicked a picture!", Toast.LENGTH_LONG);
+        Toast tst = Toast.makeText(MainActivity.getInstance(), "You clicked on " + CardManager.getInstance().getCardNames()[position] + "!", Toast.LENGTH_SHORT);
         tst.show();
         //FragmentManager fragmentManager = getFragmentManager();
         //FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();

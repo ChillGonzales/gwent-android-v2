@@ -24,6 +24,7 @@ import java.util.ArrayList;
 public class CardManager {
     static CardManager instance;
     ArrayList<Bitmap> images = new ArrayList<>();
+    ArrayList<String> names = new ArrayList<>();
     private String baseUri = "https://api.gwentapi.com/v0/";
     private String cardsEndpoint = "cards";
     private Context mContext;
@@ -53,6 +54,7 @@ public class CardManager {
                 JSONObject card = cardArray.getJSONObject(i);
                 String[] split = card.get("href").toString().split("/");
                 CardInfo ci = new CardInfo(card.get("name").toString(), split[split.length - 1]);
+                names.add(ci.name);
 
                 //Read variation data from assets file
                 StringBuilder text = new StringBuilder();
@@ -103,5 +105,9 @@ public class CardManager {
     }
     public Bitmap[] getCardsArtwork() {
         return images.toArray(new Bitmap[images.size()]);
+    }
+    public String[] getCardNames() { return names.toArray(new String[names.size()]); }
+    public boolean downloadComplete() {
+        return names.size() <= images.size();
     }
 }
